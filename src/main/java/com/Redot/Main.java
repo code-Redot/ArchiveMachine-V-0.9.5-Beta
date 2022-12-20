@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,61 +13,67 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
 
-    public static File[] convertFileCollectionToFileArray(Collection<File> files){
-
-        return files.toArray(new File[0]);
-    }
-
-    public static boolean copyRecurseHandler(String source, String destination, int limit,int init,int folderer) throws IOException {
+    public static boolean copyRecurseHandler(String source, String destination, int limit,int partioner) throws IOException {
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
         File[] listOfFiles = srcFolder.listFiles();
 
+        int increment = 0;
+
         //stop condition
-        if (listOfFiles[limit] ==null || !listOfFiles[limit].exists()){System.out.println("Exiting..."); return true;}
+        if (listOfFiles.length == 0 || !listOfFiles[0].exists()){System.out.println("Exiting1"); return true;}
 
         //sub-folder creating and checking
-        if (DirectoryFileFilter.DIRECTORY.accept(new File(destination+"\\P"+folderer))){
-            folderer++;
-            copyRecurseHandler(source,destination,limit,init,++folderer);
+        if (DirectoryFileFilter.DIRECTORY.accept(new File(destination+"\\P"+ partioner))){
+            partioner++;
+            copyRecurseHandler(source,destination,limit,partioner);
         }else{
-            System.out.println("creating the sub-destination..");
-            FileUtils.forceMkdir(new File(destination+"\\P"+folderer));
+            System.out.println("\nCreating the sub-destination.");
+            FileUtils.forceMkdir(new File(destination+"\\P"+ partioner));
         }
 
+        //copying method
+        System.out.print("copying");
+        copyRecurse(source,destination,limit, partioner);
+        //recurring till source is zero
 
-        copyRecurse(source,destination,limit,folderer);
+        //System.exit(0);
+        copyRecurseHandler(source,destination,limit,partioner);
 
-        copyRecurseHandler(source,destination,limit,init,++folderer);
-        return true;
+        return false;
     }
 
 
-    public static boolean copyRecurse(String source, String destination, int limit,int folderer){
-        //stop condition
-        if (limit <= -1){System.out.println("copying..."); return true;}
+    public static boolean copyRecurse(String source, String destination, int limit,int partioner){
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
         File[] listOfFiles = srcFolder.listFiles();
 
+        //Checks id source is empty
+        assert listOfFiles != null;
+        if (listOfFiles.length == 0 || !listOfFiles[0].exists()){System.out.println("Finished"); System.exit(0);}
+
+        //stop conditions
+        if (limit < 0 ){System.out.println("Exiting2"); return true;}
+
+        System.out.print(".");
 
         try {
-            if (listOfFiles[limit].isDirectory()) {
+            if (listOfFiles[0].isDirectory()) {
 
-
-                FileUtils.moveDirectoryToDirectory(listOfFiles[limit], new File(destination+"\\P"+folderer), false);
+                FileUtils.moveDirectoryToDirectory(listOfFiles[0], new File(destination+"\\P"+ partioner), false);
             }
-            if (listOfFiles[limit].isFile()){
+            if (listOfFiles[0].isFile()){
 
-                FileUtils.moveFileToDirectory(listOfFiles[limit], new File(destination+"\\P"+folderer),false);
+                FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination+"\\P"+ partioner),false);
             }
 
 
         }catch (IOException e) {e.printStackTrace();}
 
-        copyRecurse(source,destination,limit-1,folderer);
+        copyRecurse(source,destination,--limit, partioner);
         return true;
     }
 
@@ -86,14 +91,16 @@ public class Main {
 
 
         //the limit of destination partition limit items
-        int folderlim = 4;
+        int folderLimit = 24;
 
 
+        //Checks if source exists
         if (!DirectoryFileFilter.DIRECTORY.accept(new File(src))) {
             System.out.println("source does not exist \nExiting...");
             System.exit(0);
         }
 
+        //Checks if destination exists
         if (!DirectoryFileFilter.DIRECTORY.accept(new File(dest))){
             System.out.println("creating the destination...");
             FileUtils.forceMkdir(new File(dest));
@@ -103,7 +110,7 @@ public class Main {
 
 
 
-        copyRecurseHandler(src,destination,folderlim,folderlim,1);
+        copyRecurseHandler(src,destination, folderLimit,1);
 
 
     }
