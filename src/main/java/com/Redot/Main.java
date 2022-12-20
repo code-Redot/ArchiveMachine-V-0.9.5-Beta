@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-
 public class Main {
 
-    public static boolean copyRecurseHandler(String source, String destination, int limit,int partioner) throws IOException {
+    public static boolean copyRecurseHandler(String source, String destination, int limit, int partioner) throws IOException {
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
@@ -22,30 +21,33 @@ public class Main {
         int increment = 0;
 
         //stop condition
-        if (listOfFiles.length == 0 || !listOfFiles[0].exists()){System.out.println("Exiting1"); return true;}
+        if (listOfFiles.length == 0 || !listOfFiles[0].exists()) {
+            System.out.println("Exiting1");
+            return true;
+        }
 
         //sub-folder creating and checking
-        if (DirectoryFileFilter.DIRECTORY.accept(new File(destination+"\\P"+ partioner))){
+        if (DirectoryFileFilter.DIRECTORY.accept(new File(destination + "\\P" + partioner))) {
             partioner++;
-            copyRecurseHandler(source,destination,limit,partioner);
-        }else{
+            copyRecurseHandler(source, destination, limit, partioner);
+        } else {
             System.out.println("\nCreating the sub-destination.");
-            FileUtils.forceMkdir(new File(destination+"\\P"+ partioner));
+            FileUtils.forceMkdir(new File(destination + "\\P" + partioner));
         }
 
         //copying method
         System.out.print("copying");
-        copyRecurse(source,destination,limit, partioner);
+        copyRecurse(source, destination, limit, partioner);
         //recurring till source is zero
 
         //System.exit(0);
-        copyRecurseHandler(source,destination,limit,partioner);
+        copyRecurseHandler(source, destination, limit, partioner);
 
         return false;
     }
 
 
-    public static boolean copyRecurse(String source, String destination, int limit,int partioner){
+    public static boolean copyRecurse(String source, String destination, int limit, int partioner) {
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
@@ -53,27 +55,35 @@ public class Main {
 
         //Checks id source is empty
         assert listOfFiles != null;
-        if (listOfFiles.length == 0 || !listOfFiles[0].exists()){System.out.println("Finished"); System.exit(0);}
+        if (listOfFiles.length == 0 || !listOfFiles[0].exists()) {
+            System.out.println("Finished");
+            System.exit(0);
+        }
 
         //stop conditions
-        if (limit < 0 ){System.out.println("Exiting2"); return true;}
+        if (limit < 0) {
+            System.out.println("Exiting2");
+            return true;
+        }
 
         System.out.print(".");
 
         try {
             if (listOfFiles[0].isDirectory()) {
 
-                FileUtils.moveDirectoryToDirectory(listOfFiles[0], new File(destination+"\\P"+ partioner), false);
+                FileUtils.moveDirectoryToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
             }
-            if (listOfFiles[0].isFile()){
+            if (listOfFiles[0].isFile()) {
 
-                FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination+"\\P"+ partioner),false);
+                FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
             }
 
 
-        }catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        copyRecurse(source,destination,--limit, partioner);
+        copyRecurse(source, destination, --limit, partioner);
         return true;
     }
 
@@ -87,7 +97,7 @@ public class Main {
         //destination naming
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy MMM");
-        String destination = dest+"\\"+(myDateObj.format(myFormatObj));
+        String destination = dest + "\\" + (myDateObj.format(myFormatObj));
 
 
         //the limit of destination partition limit items
@@ -101,16 +111,14 @@ public class Main {
         }
 
         //Checks if destination exists
-        if (!DirectoryFileFilter.DIRECTORY.accept(new File(dest))){
+        if (!DirectoryFileFilter.DIRECTORY.accept(new File(dest))) {
             System.out.println("creating the destination...");
             FileUtils.forceMkdir(new File(dest));
 
         }
 
 
-
-
-        copyRecurseHandler(src,destination, folderLimit,1);
+        copyRecurseHandler(src, destination, folderLimit, 1);
 
 
     }
