@@ -9,8 +9,5 @@
         <module name="ArchiveMachine" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ArchiveMachine" target="16" />
-    </bytecodeTargetLevel>
   </component>
 </project>
