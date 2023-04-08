@@ -6,5 +6,5 @@ UPDATE:
 * 9th april 2023 Added GUI (JavaFX)
 
 What to anticipate:
-*filtration functions (ignore files/folders/short cuts if possible)
+* filtration functions (ignore files/folders/short cuts if possible)
 
