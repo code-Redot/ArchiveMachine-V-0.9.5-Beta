@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,8 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
@@ -23,12 +19,9 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 
 public class DirectorySelectorApp extends Application {
 
-    private static final Logger LOGGER = Logger.getLogger(DirectorySelectorApp.class.getName());
-
     public TextField sourceDirectoryField;
     public TextField destinationDirectoryField;
     private TextField folderItemLimiter;
-    private Label logLabel;
 
     @Override
     public void start(Stage primaryStage) {
@@ -75,11 +68,8 @@ public class DirectorySelectorApp extends Application {
         // start button
         Button startButton = new Button("Start");
         startButton.setOnAction(e -> {
-            LOGGER.log(Level.INFO, "Copying files from {0} to {1}", new Object[]{sourceDirectoryField.getText(), destinationDirectoryField.getText()});
-
 
             // do file copying here
-            logLabel.setText("File copying in progress...");
 
             //destination naming
             LocalDateTime myDateObj = LocalDateTime.now();
@@ -114,14 +104,6 @@ public class DirectorySelectorApp extends Application {
             // end file copying here
         });
 
-        // create log label
-        logLabel = new Label();
-        logLabel.setPrefWidth(400);
-        logLabel.setWrapText(true);
-        logLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        logLabel.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
-        logLabel.setAlignment(Pos.TOP_LEFT);
-        logLabel.setPadding(new Insets(10, 10, 10, 10));
 
         // add UI elements to grid pane
         gridPane.add(sourceDirectoryLabel, 0, 0);
@@ -138,8 +120,8 @@ public class DirectorySelectorApp extends Application {
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(gridPane, logLabel);
-        // create scene and set on primary stage
+        //vbox.getChildren().addAll(gridPane, logLabel);
+        vbox.getChildren().addAll(gridPane);
         Scene scene = new Scene(vbox);
         primaryStage.setScene(scene);
 
