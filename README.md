@@ -7,4 +7,5 @@ UPDATE:
 
 What to anticipate:
 * filtration functions (ignore files/folders/short cuts if possible)
+* integration of Compression/decompression (7zip/rar)
 
