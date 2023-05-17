@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -65,6 +66,9 @@ public class DirectorySelectorApp extends Application {
         folderItemLimiter = new TextField();
         destinationDirectoryField.setEditable(true);
 
+        // ignore shortcuts check box
+        CheckBox ignoreShortcutsCheckBox = new CheckBox("Ignore Shortcuts");
+
         // start button
         Button startButton = new Button("Start");
         startButton.setOnAction(e -> {
@@ -78,6 +82,8 @@ public class DirectorySelectorApp extends Application {
 
 
             System.out.println(sourceDirectoryField.getText()); //DELETE ME!!!
+
+
 
             //Checks if source exists
             if (!DirectoryFileFilter.DIRECTORY.accept(new File(sourceDirectoryField.getText()))) {
@@ -95,7 +101,7 @@ public class DirectorySelectorApp extends Application {
                 }
             }
             try {
-                CopyMachine.copyRecurseHandler(sourceDirectoryField.getText(), destination, Integer.parseInt(folderItemLimiter.getText()), 1);
+                CopyMachine.copyRecurseHandler(sourceDirectoryField.getText(), destination, Integer.parseInt(folderItemLimiter.getText()), 1, ignoreShortcutsCheckBox.isSelected());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -114,6 +120,8 @@ public class DirectorySelectorApp extends Application {
         gridPane.add(targetDirectoryButton, 2, 1);
         gridPane.add(folderItemLimiterLabel, 0, 2);
         gridPane.add(folderItemLimiter, 1, 2);
+        gridPane.add(ignoreShortcutsCheckBox, 2, 2);
+
         gridPane.add(startButton, 1, 3);
 
         // create vertical box to hold grid pane and log label
@@ -126,6 +134,8 @@ public class DirectorySelectorApp extends Application {
         primaryStage.setScene(scene);
 
         // show the window
+
+        primaryStage.setResizable(false);
         primaryStage.show();
 
 

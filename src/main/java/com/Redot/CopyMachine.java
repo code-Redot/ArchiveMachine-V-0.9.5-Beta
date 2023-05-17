@@ -4,13 +4,24 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Arrays;
+
 
 public class CopyMachine {
 
 
+    static boolean ignoreShort;
 
-    public static boolean copyRecurseHandler(String source, String destination, int limit, int partioner) throws IOException {
+    static FileFilter fileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            return !file.getName().toLowerCase().endsWith(".lnk") && !file.getName().equals("desktop.ini") && file.isFile();
+        }
+    };
+
+    public static boolean copyRecurseHandler(String source, String destination, int limit, int partioner, boolean ignoreShort) throws IOException {
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
@@ -27,25 +38,27 @@ public class CopyMachine {
         //sub-folder creating and checking
         if (DirectoryFileFilter.DIRECTORY.accept(new File(destination + "\\P" + partioner))) {
             partioner++;
-            copyRecurseHandler(source, destination, limit, partioner);
+            copyRecurseHandler(source, destination, limit, partioner, ignoreShort);
         } else {
             System.out.println("\nCreating the sub-destination.");
             FileUtils.forceMkdir(new File(destination + "\\P" + partioner));
+
+
         }
 
         //copying method
         System.out.print("copying");
-        copyRecurse(source, destination, limit, partioner);
+        copyRecurse(source, destination, limit, partioner, ignoreShort);
         //recurring till source is zero
 
         //System.exit(0);
-        copyRecurseHandler(source, destination, limit, partioner);
+        copyRecurseHandler(source, destination, limit, partioner,ignoreShort);
 
         return false;
     }
 
 
-    public static boolean copyRecurse(String source, String destination, int limit, int partioner) {
+    public static boolean copyRecurse(String source, String destination, int limit, int partioner,boolean ignoreShort) {
 
         //selecting the path in file and turning it into array
         File srcFolder = new File(source);
@@ -65,6 +78,7 @@ public class CopyMachine {
         }
 
         System.out.print(".");
+        System.out.print(ignoreShort);
 
         try {
             if (listOfFiles[0].isDirectory()) {
@@ -73,7 +87,21 @@ public class CopyMachine {
             }
             if (listOfFiles[0].isFile()) {
 
-                FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
+                if (ignoreShort == true){
+
+                    // Filter out shortcuts from the 'files' array
+                    File[] filteredFiles = Arrays.stream(listOfFiles)
+                            .filter(fileFilter::accept)
+                            .toArray(File[]::new);
+
+                    FileUtils.moveFileToDirectory(filteredFiles[0], new File(destination + "\\P" + partioner), false);
+
+
+                } else {
+
+                    FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
+                }
+
             }
 
 
@@ -81,7 +109,7 @@ public class CopyMachine {
             e.printStackTrace();
         }
 
-        copyRecurse(source, destination, --limit, partioner);
+        copyRecurse(source, destination, --limit, partioner,ignoreShort);
         return true;
     }
 
