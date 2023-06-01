@@ -38,7 +38,6 @@ public class DirectorySelectorApp extends Application {
         Button sourceDirectoryButton = new Button("Select...");
         Label sourceDirectoryLabel = new Label("Source Directory:");
         sourceDirectoryField = new TextField();
-        sourceDirectoryField.setEditable(false);
         sourceDirectoryButton.setOnAction(e -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             File selectedDirectory = directoryChooser.showDialog(primaryStage);
@@ -49,9 +48,8 @@ public class DirectorySelectorApp extends Application {
 
         // target directory selector
         Button targetDirectoryButton = new Button("Select...");
-        Label targetDirectoryLabel = new Label("destination Directory:");
+        Label targetDirectoryLabel = new Label("Destination Directory:");
         destinationDirectoryField = new TextField();
-        destinationDirectoryField.setEditable(false);
 
         targetDirectoryButton.setOnAction(e -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -87,13 +85,13 @@ public class DirectorySelectorApp extends Application {
 
             //Checks if source exists
             if (!DirectoryFileFilter.DIRECTORY.accept(new File(sourceDirectoryField.getText()))) {
-                System.out.println("source does not exist \nExiting...");
+                System.out.println("Source does not exist \nExiting...");
                 System.exit(0);
             }
 
             //Checks if destination exists
             if (!DirectoryFileFilter.DIRECTORY.accept(new File(destinationDirectoryField.getText()))) {
-                System.out.println("creating the destination...");
+                System.out.println("Creating the destination...");
                 try {
                     FileUtils.forceMkdir(new File(destinationDirectoryField.getText()));
                 } catch (IOException ex) {

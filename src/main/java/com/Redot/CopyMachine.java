@@ -31,7 +31,7 @@ public class CopyMachine {
 
         //stop condition
         if (listOfFiles.length == 0 || !listOfFiles[0].exists()) {
-            System.out.println("Exiting1");
+            System.out.println(" Exiting1");
             return true;
         }
 
@@ -47,7 +47,7 @@ public class CopyMachine {
         }
 
         //copying method
-        System.out.print("copying");
+        System.out.print("Copying");
         copyRecurse(source, destination, limit, partioner, ignoreShort);
         //recurring till source is zero
 
@@ -67,13 +67,13 @@ public class CopyMachine {
         //Checks id source is empty
         assert listOfFiles != null;
         if (listOfFiles.length == 0 || !listOfFiles[0].exists()) {
-            System.out.println("Finished");
+            System.out.println(" Finished");
             System.exit(0);
         }
 
         //stop conditions
         if (limit < 0) {
-            System.out.println("Exiting2");
+            System.out.println(" Exiting2");
             return true;
         }
 
@@ -81,23 +81,35 @@ public class CopyMachine {
         System.out.print(ignoreShort);
 
         try {
-            if (listOfFiles[0].isDirectory()) {
+            if (ignoreShort == true) {
 
-                FileUtils.moveDirectoryToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
-            }
-            if (listOfFiles[0].isFile()) {
+                // Filter out shortcuts from the 'files' array
+                File[] filteredFiles = Arrays.stream(listOfFiles)
+                        .filter(file -> !file.getName().endsWith(".lnk"))
+                        .toArray(File[]::new);
 
-                if (ignoreShort == true){
+                 //<--point of logging
 
-                    // Filter out shortcuts from the 'files' array
-                    File[] filteredFiles = Arrays.stream(listOfFiles)
-                            .filter(fileFilter::accept)
-                            .toArray(File[]::new);
+
+                if (filteredFiles.length == 0) {
+                    System.out.println(" No files or folders to process. Exiting...");
+                    System.exit(0);
+                }
+                if (filteredFiles[0].isDirectory()) {
+
+                    FileUtils.moveDirectoryToDirectory(filteredFiles[0], new File(destination + "\\P" + partioner), false);
+                }
+                if (filteredFiles[0].isFile()) {
 
                     FileUtils.moveFileToDirectory(filteredFiles[0], new File(destination + "\\P" + partioner), false);
+                }
+            }else{
+                if (listOfFiles[0].isDirectory()) {
 
+                    FileUtils.moveDirectoryToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
+                }
 
-                } else {
+                if (listOfFiles[0].isFile()) {
 
                     FileUtils.moveFileToDirectory(listOfFiles[0], new File(destination + "\\P" + partioner), false);
                 }
