@@ -1,12 +1,13 @@
 # ArchiveMachine
 
-## Version: 0.9 Beta
+## Version: 0.9.5 Beta
 
 ArchiveMachine is a tool designed to manage and archive files and folders by automating the process of copying them from a source to a destination, while providing various controls. This project is currently in the beta stage.
 
 ## Update
 
-* 9th April 2023: Added GUI (JavaFX)
+* -1th June 2023: Added Filtiration Functionality
+* -9th April 2023: Added GUI (JavaFX)
 
 ## Features
 
