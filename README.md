@@ -6,7 +6,7 @@ ArchiveMachine is a tool designed to manage and archive files and folders by aut
 
 ## Update
 
-* -1th June 2023: Added Filtiration Functionality
+* -1th June 2023: Added Filtiration Functionality (ShortCuts only)
 * -9th April 2023: Added GUI (JavaFX)
 
 ## Features
