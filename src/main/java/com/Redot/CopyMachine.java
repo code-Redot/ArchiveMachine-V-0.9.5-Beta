@@ -88,7 +88,8 @@ public class CopyMachine {
                         .filter(file -> !file.getName().endsWith(".lnk"))
                         .toArray(File[]::new);
 
-                 //<--point of logging
+                //<--point of logging
+                //testing
 
 
                 if (filteredFiles.length == 0) {
