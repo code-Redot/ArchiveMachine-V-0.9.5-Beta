@@ -16,5 +16,10 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="a224d527-cf86-4e6b-823e-199af040c3cd" />
+      <option name="name" value="a224d527-cf86-4e6b-823e-199af040c3cd" />
+      <option name="url" value="https://mvnrepository.com/" />
+    </remote-repository>
   </component>
 </project>
